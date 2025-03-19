@@ -215,6 +215,7 @@ static void showhide(Client *c);
 static void sigstatusbar(const Arg *arg);
 static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
+static void shift(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
@@ -234,6 +235,7 @@ static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
+static void shiftview(const Arg *arg);
 static void warp(const Client *c);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
@@ -1793,6 +1795,23 @@ tag(const Arg *arg)
 }
 
 void
+shift(const Arg *arg)
+{
+	if (selmon->sel && arg->i) {
+		unsigned int newtags = selmon->sel->tags;
+		if (arg->i > 0)
+			newtags = (newtags >> arg->i)
+			| (newtags << (LENGTH(tags) - arg->i));
+		else
+			newtags = (newtags << -arg->i)
+			| (newtags >> (LENGTH(tags) + arg->i));
+		selmon->sel->tags = newtags;
+		focus(NULL);
+		arrange(selmon);
+	}
+}
+
+void
 tagmon(const Arg *arg)
 {
 	if (!selmon->sel || !mons->next)
@@ -2190,6 +2209,25 @@ warp(const Client *c)
 
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 }
+
+void
+shiftview(const Arg *arg)
+{
+	unsigned int newtags = 0;
+
+	newtags = selmon->tagset[selmon->seltags];
+	if (arg->i > 0)
+	  newtags = (newtags >> arg->i)
+	    | (newtags << (LENGTH(tags) - arg->i));
+	else
+	  newtags = (newtags << -arg->i)
+	    | (newtags >> (LENGTH(tags) + arg->i));
+
+	Arg ntarg = {.ui = newtags};
+	view(&ntarg);
+}
+
+
 
 Client *
 wintoclient(Window w)
