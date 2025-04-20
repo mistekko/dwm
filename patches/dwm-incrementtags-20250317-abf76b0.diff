@@ -1,0 +1,83 @@
+From abf76b0ccdad137c9e07f88f4efa31d701eda957 Mon Sep 17 00:00:00 2001
+From: mistekko <steamlie@protonmail.com>
+Date: Mon, 17 Mar 2025 21:43:02 -0500
+Subject: [PATCH] Add functions for rigidly shifting view/client tags left or
+ right
+
+---
+ dwm.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/dwm.c b/dwm.c
+index f1d86b2..cfa9cca 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -207,6 +207,7 @@ static void seturgent(Client *c, int urg);
+ static void showhide(Client *c);
+ static void spawn(const Arg *arg);
+ static void tag(const Arg *arg);
++static void shift(const Arg *arg);
+ static void tagmon(const Arg *arg);
+ static void tile(Monitor *m);
+ static void togglebar(const Arg *arg);
+@@ -227,6 +228,7 @@ static void updatetitle(Client *c);
+ static void updatewindowtype(Client *c);
+ static void updatewmhints(Client *c);
+ static void view(const Arg *arg);
++static void shiftview(const Arg *arg);
+ static Client *wintoclient(Window w);
+ static Monitor *wintomon(Window w);
+ static int xerror(Display *dpy, XErrorEvent *ee);
+@@ -1676,6 +1678,23 @@ tag(const Arg *arg)
+ 	}
+ }
+ 
++void
++shift(const Arg *arg)
++{
++	if (selmon->sel && arg->i) {
++		unsigned int newtags = selmon->sel->tags;
++		if (arg->i > 0)
++			newtags = (newtags >> arg->i)
++			| (newtags << (LENGTH(tags) - arg->i));
++		else
++			newtags = (newtags << -arg->i)
++			| (newtags >> (LENGTH(tags) + arg->i));
++		selmon->sel->tags = newtags;
++		focus(NULL);
++		arrange(selmon);
++	}
++}
++
+ void
+ tagmon(const Arg *arg)
+ {
+@@ -2062,6 +2081,25 @@ view(const Arg *arg)
+ 	arrange(selmon);
+ }
+ 
++void
++shiftview(const Arg *arg)
++{
++	unsigned int newtags = 0;
++
++	newtags = selmon->tagset[selmon->seltags];
++	if (arg->i > 0)
++	  newtags = (newtags >> arg->i)
++	    | (newtags << (LENGTH(tags) - arg->i));
++	else
++	  newtags = (newtags << -arg->i)
++	    | (newtags >> (LENGTH(tags) + arg->i));
++
++	Arg ntarg = {.ui = newtags};
++	view(&ntarg);
++}
++
++
++
+ Client *
+ wintoclient(Window w)
+ {
+-- 
+2.48.1
+
