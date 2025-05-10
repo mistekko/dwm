@@ -27,12 +27,12 @@ static char *colors[][3] = {
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
-static const unsigned int baralpha = 204; // alpha_centigrade * 51 / 20;
-static const unsigned int borderalpha = OPAQUE;
-static const unsigned int alphas[][3]      = {
+static const unsigned int baralpha = 204U; // alpha_centigrade * 51 / 20;
+static const unsigned int borderalpha = 0xffU;
+static unsigned int alphas[][3] = {
     /*               fg      bg        border*/
-    [SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+    [SchemeNorm] = { 0xffU, baralpha, borderalpha },
+    [SchemeSel]  = { 0xffU, baralpha, borderalpha },
 };
 
 

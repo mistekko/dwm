@@ -78,7 +78,6 @@
                                     } \
                                   } \
                                 }
-#define OPAQUE                  0xffU
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
