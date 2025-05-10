@@ -181,7 +181,7 @@ index c2bd871..3b34de8 100644
  static int xerror(Display *dpy, XErrorEvent *ee);
  static int xerrordummy(Display *dpy, XErrorEvent *ee);
  static int xerrorstart(Display *dpy, XErrorEvent *ee);
-+static void xinitvisual();
++static void xinitvisual(void);
  static void zoom(const Arg *arg);
  
  /* variables */
@@ -244,7 +244,7 @@ index c2bd871..3b34de8 100644
  }
  
 +void
-+xinitvisual()
++xinitvisual(void)
 +{
 +    XVisualInfo *infos;
 +	XRenderPictFormat *fmt;
