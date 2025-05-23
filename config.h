@@ -4,7 +4,7 @@
 
 /* appearance */
 /* #include "/home/mistekko/.cache/wal/colors-wal-dwm.h" */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 5;       /* snap pixel */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
@@ -14,8 +14,7 @@ static const int swallowfloating    = 1;	/* 1 means swallow floating windows by 
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Andale Mono:size=14" };
-static const char dmenufont[]       = "Andale Mono:size=14";
+static const char *fonts[]          = { "Ubuntu Mono:size=14:style=Regular" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -37,7 +36,7 @@ static unsigned int alphas[][3] = {
 
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
+static const char *tags[] = { "tem", "txt", "doc", "mus", "int", "oth" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -48,8 +47,9 @@ static const Rule rules[] = {
 	{ "URxvt",     NULL,	NULL,   0,	0,     1 },
 	{ "st-256color",  NULL,	NULL,   0,	0,     1 },
 	{ "Emacs",     NULL,    NULL,   2,      0,     0 },
-	{ "LibreWolf", NULL,    NULL,   1 << 4, 0,     0 },
+	{ "librewolf", NULL,    NULL,   1 << 4, 0,     0 },
 	{ "Anki",      NULL,    NULL,   1 << 2, 0,     0 },
+	{ "steam",     NULL,	NULL,	1 << 5, 0,     0 },
 	{ "org.nicotine_plus.Nicotine", NULL, NULL, 1 << 5, 0, 0 },
 };
 
@@ -64,9 +64,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[T]",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "[X]",      NULL },    /* no layout function means floating behavior */
+	{ "[|]",      tile },    /* first entry is default */
+	{ "[ ]",      monocle },
+	{ "|||",      NULL },    /* no layout function means floating behavior */
 	{ "[\\]",     dwindle },
 	{ "H[]",      deck },
 	{ "TTT",      bstack },
@@ -102,7 +102,7 @@ static const char *toggleopacitycmd[] = { "toggle-opacity", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_space,  spawn,          {.v = dmenucmd } },
+	{ MODKEY,                  XK_apostrophe,  spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ControlMask,		XK_Return, spawn,	   {.v = term2cmd } },
 	{ MODKEY,                       XK_p,      togglebar,      {0} },

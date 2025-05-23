@@ -836,9 +836,11 @@ drawbar(Monitor *m)
 {
 	int x, w, tw = 0;
 	int boxs = drw->fonts->h / 9;
-	int boxw = drw->fonts->h / 6 + 2;
+	int boxw = drw->fonts->h / 3;
+	int boxh = 1;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
+	int current_scheme = SchemeNorm;
 
 	if (!m->showbar)
 		return;
@@ -873,12 +875,19 @@ drawbar(Monitor *m)
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+		if (m->tagset[m->seltags] & 1 << i) {
+			current_scheme = SchemeSel;
+			boxw *= 3;
+			boxh = 1;
+		}
+		drw_setscheme(drw, scheme[current_scheme]);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		if (occ & 1 << i)
-			drw_rect(drw, x + boxs, boxs, boxw, boxw,
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				urg & 1 << i);
+			drw_rect(drw, x + (w - boxw) / 2, drw->fonts->h,
+				 boxw, boxh, 1, urg & 1 << i);
+		boxw = drw->fonts->h / 3;
+		boxh = 1;
+		current_scheme = SchemeNorm;
 		x += w;
 	}
 	w = TEXTW(m->ltsymbol);
@@ -1845,7 +1854,7 @@ setup(void)
 	drw = drw_create(dpy, screen, root, sw, sh, visual, depth, cmap);
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 		die("no fonts could be loaded.");
-	lrpad = drw->fonts->h;
+	lrpad = drw->fonts->h - 2;
 	bh = drw->fonts->h + 2;
 	updategeom();
 	/* init atoms */
