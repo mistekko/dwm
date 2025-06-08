@@ -836,8 +836,8 @@ drawbar(Monitor *m)
 {
 	int x, w, tw = 0;
 	int boxs = drw->fonts->h / 9;
-	int boxw = drw->fonts->h / 3;
-	int boxh = 1;
+	int boxw = drw->fonts->h / 2;
+	int boxh = 2;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
 	int current_scheme = SchemeNorm;
@@ -878,15 +878,15 @@ drawbar(Monitor *m)
 		if (m->tagset[m->seltags] & 1 << i) {
 			current_scheme = SchemeSel;
 			boxw *= 3;
-			boxh = 1;
+			boxh = 2;
 		}
 		drw_setscheme(drw, scheme[current_scheme]);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		if (occ & 1 << i)
 			drw_rect(drw, x + (w - boxw) / 2, drw->fonts->h,
 				 boxw, boxh, 1, urg & 1 << i);
-		boxw = drw->fonts->h / 3;
-		boxh = 1;
+		boxw = drw->fonts->h / 2;
+		boxh = 2;
 		current_scheme = SchemeNorm;
 		x += w;
 	}
