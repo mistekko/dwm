@@ -4,8 +4,9 @@
 
 /* appearance */
 /* #include "/home/mistekko/.cache/wal/colors-wal-dwm.h" */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 5;       /* snap pixel */
+static       unsigned int borderpx  = 3;        /* border pixel of windows */
+static const unsigned int snap      = 5;        /* snap pixel */
+static const int ty                 = -2;       /* bar's text vertical offset */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
@@ -14,7 +15,9 @@ static const int swallowfloating    = 1;	/* 1 means swallow floating windows by 
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Ubuntu Mono:size=14:style=Regular" };
+/* static const char *fonts[]	    = { "Monoid-Regular:size=12" }; */
+static const char *fonts[]	    = { "NDOT 47 (inspired by NOTHING):size=13" };
+/* static const char *fonts[]          = { "HyperFont:size=14:style=Regular" }; */
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -36,7 +39,7 @@ static unsigned int alphas[][3] = {
 
 
 /* tagging */
-static const char *tags[] = { "tem", "txt", "doc", "mus", "int", "oth" };
+static const char *tags[] = { "shell", "emacs", "info", "music", "lwolf", "misc." };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -50,7 +53,9 @@ static const Rule rules[] = {
 	{ "librewolf", NULL,    NULL,   1 << 4, 0,     0 },
 	{ "Anki",      NULL,    NULL,   1 << 2, 0,     0 },
 	{ "steam",     NULL,	NULL,	1 << 5, 0,     0 },
+	{ "Sxiv",      "newl",  NULL,   0,      1,     0 },
 	{ "org.nicotine_plus.Nicotine", NULL, NULL, 1 << 5, 0, 0 },
+	{ "Jellyfin Media Player", NULL, NULL, 1 << 3, 0, 0 },
 };
 
 /* layout(s) */
@@ -133,7 +138,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_0,                      5)
 	{ MODKEY|ShiftMask,             XK_r,      quit,           {0} },
 	{ MODKEY|ShiftMask,		XK_q,      spawn,	   {.v = exitcmd } },
 	{ MODKEY|ShiftMask,		XK_g,	   spawn,	   {.v = toggleopacitycmd } },
