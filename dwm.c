@@ -199,7 +199,7 @@ static void detach(Client *c);
 static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
-static void drawbars(void);
+static void nrawbars(void);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
@@ -856,14 +856,14 @@ drawbar(Monitor *m)
 				ch = *s;
 				*s = '\0';
 				tw = TEXTW(text) - lrpad;
-				drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
+				drw_text(drw, m->ww - statusw + x, ty, tw, bh - ty, 0, text, 0);
 				x += tw;
 				*s = ch;
 				text = s + 1;
 			}
 		}
 		tw = TEXTW(text) - lrpad + 2;
-		drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
+		drw_text(drw, m->ww - statusw + x, ty, tw, bh - ty, 0, text, 0);
 		tw = statusw;
 	}
 
@@ -878,26 +878,25 @@ drawbar(Monitor *m)
 		if (m->tagset[m->seltags] & 1 << i) {
 			current_scheme = SchemeSel;
 			boxw *= 3;
-			boxh = 2;
 		}
 		drw_setscheme(drw, scheme[current_scheme]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		drw_text(drw, x, ty, w, bh - ty, lrpad / 2, tags[i], urg & 1 << i);
 		if (occ & 1 << i)
-			drw_rect(drw, x + (w - boxw) / 2, drw->fonts->h,
+			drw_rect(drw, x + (w - boxw) / 2, bh - boxh,
 				 boxw, boxh, 1, urg & 1 << i);
 		boxw = drw->fonts->h / 2;
-		boxh = 2;
 		current_scheme = SchemeNorm;
 		x += w;
 	}
 	w = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	// -1 has something to do with 0; todo: fix this half-assed hack
+	x = drw_text(drw, x, ty, w, bh - ty, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - tw - x) > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+			drw_text(drw, x, ty, w, bh - ty, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
@@ -1855,7 +1854,7 @@ setup(void)
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 		die("no fonts could be loaded.");
 	lrpad = drw->fonts->h - 2;
-	bh = drw->fonts->h + 2;
+	bh = drw->fonts->h + ty;
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
