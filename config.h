@@ -243,3 +243,4 @@ static Signal signals[] = {
 	{ "setlayoutex",    setlayoutex },
 	{ "xrdb",	    xrdb },
 };
+
