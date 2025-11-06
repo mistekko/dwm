@@ -40,6 +40,8 @@ static unsigned int alphas[][3] = {
 
 /* tagging */
 static const char *tags[] = { "shell", "emacs", "info", "music", "lwolf", "misc." };
+static unsigned int tagw; /* is set during main() */
+#define TAGW (TEXTW("emacs")) /* macro enables runtime calculation */
 
 static const Rule rules[] = {
 	/* xprop(1):

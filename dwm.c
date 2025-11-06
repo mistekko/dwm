@@ -545,7 +545,7 @@ buttonpress(XEvent *e)
 	if (ev->window == selmon->barwin) {
 		i = x = 0;
 		do
-			x += TEXTW(tags[i]);
+			x += tagw;
 		while (ev->x >= x && ++i < LENGTH(tags));
 		if (i < LENGTH(tags)) {
 			click = ClkTagBar;
@@ -874,19 +874,20 @@ drawbar(Monitor *m)
 	}
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
-		w = TEXTW(tags[i]);
+		w = drw_fontset_getwidth(drw, tags[i]);
 		if (m->tagset[m->seltags] & 1 << i) {
 			current_scheme = SchemeSel;
-			boxw *= 3;
+			boxw = w;
 		}
 		drw_setscheme(drw, scheme[current_scheme]);
-		drw_text(drw, x, ty, w, bh - ty, lrpad / 2, tags[i], urg & 1 << i);
+		drw_text(drw, x, ty, tagw, bh - ty, (tagw - w) / 2,
+			 tags[i], urg & 1 << i);
 		if (occ & 1 << i)
-			drw_rect(drw, x + (w - boxw) / 2, bh - boxh,
+			drw_rect(drw, x + (tagw - boxw) / 2, bh - boxh,
 				 boxw, boxh, 1, urg & 1 << i);
 		boxw = drw->fonts->h / 2;
 		current_scheme = SchemeNorm;
-		x += w;
+		x += tagw;
 	}
 	w = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
@@ -2712,6 +2713,7 @@ main(int argc, char *argv[])
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();
+	tagw = TAGW;
 	run();
 	cleanup();
 	XCloseDisplay(dpy);
